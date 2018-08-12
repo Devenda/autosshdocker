@@ -21,4 +21,10 @@ services:
         dns:
         - 8.8.8.8
         - 4.2.2.4
-        
+    tunnel-tester:
+        image: tunneltester
+        build: ./tunnelTester
+        container_name: tunnel-tester
+        restart: always
+        tty: true
+        stdin_open: true
