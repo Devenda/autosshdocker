@@ -1,0 +1,24 @@
+version: '3.4'
+
+services:
+    ssh-to-mysql:
+        image: autosshimage
+        build: ./sshTunnel
+        container_name: autossh-ssh-to-mysql
+        environment:
+        - SSH_HOSTUSER=ecofablab
+        - SSH_HOSTNAME=67.205.12.211 #chondu.dreamhost.com
+        - SSH_TUNNEL_REMOTE=3306
+        - SSH_TUNNEL_HOST=208.97.161.118 #mysql.ecofablab.be
+        - SSH_TUNNEL_LOCAL=3306 #mysql.ecofablab.be mysql port
+        - SSH_MODE=-Ng -L #Local forward mode (vs -R remote forward mode)
+        - SSH_KEY_FILE=/ssh/id_rsa  
+        restart: always
+        volumes:
+        - ./sshTunnel:/key #mount host current directory ./ to container /id_rsa
+        tty: true
+        stdin_open: true
+        dns:
+        - 8.8.8.8
+        - 4.2.2.4
+        
