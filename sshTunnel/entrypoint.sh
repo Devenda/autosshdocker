@@ -1,14 +1,11 @@
 #!/bin/sh
 
 # based on https://github.com/jnovack/docker-autossh
-echo entrypoint started
-
 #This is required to get it to work in windows, chmod cannot be done on ntfs (which happens when mounting)
-mkdir /ssh
+mkdir -p /ssh
 cp /key/id_rsa ${SSH_KEY_FILE:=/id_rsa}
-chmod 0400 ${SSH_KEY_FILE:=/id_rsa}
-stat -c %a ${SSH_KEY_FILE:=/id_rsa}
 
+chmod 0400 ${SSH_KEY_FILE:=/id_rsa}
 
 STRICT_HOSTS_KEY_CHECKING=no
 KNOWN_HOSTS=${SSH_KNOWN_HOSTS:=/known_hosts}
@@ -41,11 +38,7 @@ AUTOSSH_POLL=10 \
 AUTOSSH_LOGLEVEL=0 \
 AUTOSSH_LOGFILE=/dev/stdout \
 
-echo executing autossh
-
-
 autossh \
- -f \
  -M 0 \
  -N \
  -o StrictHostKeyChecking=${STRICT_HOSTS_KEY_CHECKING} ${KNOWN_HOSTS_ARG:=}  \
@@ -57,5 +50,3 @@ autossh \
  ${SSH_MODE:=-R} ${SSH_TUNNEL_REMOTE}:${SSH_TUNNEL_HOST}:${SSH_TUNNEL_LOCAL} \
  -p ${SSH_HOSTPORT:=22} \
  ${SSH_HOSTUSER}@${SSH_HOSTNAME}
-
-/bin/ash

@@ -15,9 +15,7 @@ services:
         - SSH_KEY_FILE=/ssh/id_rsa  
         restart: always
         volumes:
-        - ./sshTunnel:/key #mount host current directory ./ to container /id_rsa
-        tty: true
-        stdin_open: true
+        - ./sshTunnel:/key #mount host current directory ./sshTunnel to container /key
         dns:
         - 8.8.8.8
         - 4.2.2.4
