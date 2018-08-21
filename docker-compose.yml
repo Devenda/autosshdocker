@@ -2,8 +2,8 @@ version: '3.4'
 
 services:
     localtunnel:
-        image: localtunnelimage
-        build: ./LocalTunnel
+        image: devenda/sshtunnel
+        build: ./Tunnel
         container_name: localtunnel
         environment:
         - SSH_HOSTUSER=ecofablab
@@ -15,31 +15,30 @@ services:
         - SSH_KEY_FILE=/ssh/id_rsa  
         restart: always
         volumes:
-        - ./LocalTunnel:/key #mount host current directory ./sshTunnel to container /key
+        - ./Tunnel:/key #mount host current directory ./sshTunnel to container /key
         dns:
         - 8.8.8.8
         - 4.2.2.4
     remotetunnel:
-        image: remotetunnelimage
-        build: ./RemoteTunnel
+        image: devenda/sshtunnel
         container_name: remotetunnel
         environment:
         - SSH_HOSTUSER=ecofablab
         - SSH_HOSTNAME=67.205.12.211 #chondu.dreamhost.com
-        - SSH_TUNNEL_REMOTE=2222
+        - SSH_TUNNEL_REMOTE=22222
         - SSH_TUNNEL_HOST=host.docker.internal #resolves to ip of host
         - SSH_TUNNEL_LOCAL=80 #API port
         - SSH_MODE=-R #Local forward mode (vs -R remote forward mode)
         - SSH_KEY_FILE=/ssh/id_rsa  
         restart: always
         volumes:
-        - ./RemoteTunnel:/key #mount host current directory ./sshTunnel to container /key
+        - ./Tunnel:/key #mount host current directory ./sshTunnel to container /key
         # dns: # when using DNS does not resolve host.docker.internal
         # - 8.8.8.8
         # - 4.2.2.4
     tunnel-tester:
         image: tunneltester
-        build: ./tunnelTester
+        build: ./TunnelTester
         container_name: tunnel-tester
         restart: always
         tty: true
