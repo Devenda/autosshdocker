@@ -2,8 +2,7 @@ version: '3.4'
 
 services:
     localtunnel:
-        image: devenda/sshtunnel
-        build: ./Tunnel
+        image: devenda/sshtunnel:linux
         container_name: localtunnel
         environment:
         - SSH_HOSTUSER=ecofablab
@@ -20,7 +19,7 @@ services:
         - 8.8.8.8
         - 4.2.2.4
     remotetunnel:
-        image: devenda/sshtunnel
+        image: devenda/sshtunnel:linux
         container_name: remotetunnel
         environment:
         - SSH_HOSTUSER=ecofablab
