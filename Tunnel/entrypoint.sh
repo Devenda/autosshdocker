@@ -2,6 +2,22 @@
 
 # based on https://github.com/jnovack/docker-autossh
 #This is required to get it to work in windows, chmod cannot be done on ntfs (which happens when mounting)
+
+# to be able to use host.docker.internal on linux:
+function fix_linux_internal_host() {
+  DOCKER_INTERNAL_HOST="host.docker.internal"
+
+  if ! grep $DOCKER_INTERNAL_HOST /etc/hosts > /dev/null ; then
+    DOCKER_INTERNAL_IP=`/sbin/ip route | awk '/default/ { print $3 }' | awk '!seen[$0]++'`
+    echo -e "$DOCKER_INTERNAL_IP\t$DOCKER_INTERNAL_HOST" | tee -a /etc/hosts > /dev/null
+    echo "Added $DOCKER_INTERNAL_HOST to hosts /etc/hosts"
+  fi
+}
+
+fix_linux_internal_host
+
+
+# procede with startup config
 mkdir -p /ssh
 cp /key/id_rsa ${SSH_KEY_FILE:=/id_rsa}
 
